@@ -17,7 +17,7 @@ https://github.com/manuel-martos/LottieViewer/assets/4267427/a91c40a8-6123-450b-
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/lottie-player-desktop.git
+    git clone https://github.com/manuel-martos/LottieViewer
     ```
 2. Open Android Studio.
 3. In Android Studio, select **File > Open...**.
