@@ -9,7 +9,7 @@ LottieViewer is an open-source application built with Compose Multiplatform, spe
 
 ## Overview
 
-![Sample](img/overview.gif)
+https://github.com/manuel-martos/LottieViewer/assets/4267427/a91c40a8-6123-450b-b686-8a2c00eb5aa2
 
 ## Getting Started
 
