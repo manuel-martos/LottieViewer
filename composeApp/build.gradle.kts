@@ -24,10 +24,10 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.kotlinx.coroutines.core)
-            implementation("io.github.alexzhirkevich:compottie:1.1.2")
-            implementation("androidx.lifecycle:lifecycle-viewmodel:2.8.0")
-            implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
-            implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
+            implementation(libs.compottie)
+            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.lifecycle.viewmodel.compose)
+            implementation(libs.lifecycle.runtime.compose)
         }
 
         commonTest.dependencies {
