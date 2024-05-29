@@ -31,7 +31,6 @@ jobs:
           git config user.name "Manuel Martos Roldán"
           git checkout --orphan gh-pages
           git reset --hard
-          git add -f composeApp/build/dist/wasmJs/productionExecutable/*
-          git mv composeApp/build/dist/wasmJs/productionExecutable/* .
+          git --work-tree=composeApp/build/dist/wasmJs/productionExecutable add .
           git commit -m "Upload gh-pages"
           git push origin gh-pages --force
