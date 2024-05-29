@@ -14,15 +14,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.IconButton
-import androidx.compose.material.Slider
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,16 +31,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.DragData
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.onExternalDrag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mmartosdev.lottieviewer.data.FileStoreImpl
+import com.mmartosdev.lottieviewer.data.FileDesc
+import com.mmartosdev.lottieviewer.data.createFileStore
 import com.mmartosdev.lottieviewer.utils.dashedBorder
 import io.github.alexzhirkevich.compottie.LottieAnimation
 import io.github.alexzhirkevich.compottie.LottieComposition
@@ -49,11 +47,11 @@ import io.github.alexzhirkevich.compottie.LottieConstants
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
 import io.github.alexzhirkevich.compottie.awaitOrNull
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
-import java.net.URI
+import onDragAndDrop
 
 @Composable
 fun MainScreen(
-    viewModel: HomeViewModel = viewModel { HomeViewModel(FileStoreImpl()) },
+    viewModel: HomeViewModel = viewModel { HomeViewModel(createFileStore()) },
     modifier: Modifier = Modifier,
 ) {
     val homeScreenUiState by viewModel.state.collectAsStateWithLifecycle()
@@ -80,11 +78,10 @@ fun MainScreen(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun HomeScreenDefault(
     lottieParseState: LottieParseState?,
-    onUriReadyToParse: (URI) -> Unit,
+    onUriReadyToParse: (FileDesc) -> Unit,
     onLottieParsingSucceeded: (LottieComposition) -> Unit,
     onLottieParsingFailed: () -> Unit,
     onClearError: () -> Unit,
@@ -119,22 +116,20 @@ fun HomeScreenDefault(
                         dashWidth = 12.dp,
                         gapWidth = 8.dp,
                     )
-                    .onExternalDrag(
-                        enabled = true,
-                        onDrag = { },
-                        onDrop = {
-                            handleDrop(it.dragData, onUriReadyToParse)
-                            isDragging = false
-                        },
-                        onDragExit = {
-                            isDragging = false
-                        },
+                    .onDragAndDrop(
                         onDragStart = {
                             isDragging = true
                             if (showError) {
                                 onClearError()
                             }
                         },
+                        onDragExit = {
+                            isDragging = false
+                        },
+                        onSingleFileDropped = {
+                            onUriReadyToParse(it)
+                            isDragging = false
+                        }
                     )
                     .padding(32.dp),
             )
@@ -208,12 +203,11 @@ fun parseLottieAnimation(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun HomeScreenLottiePlayer(
     composition: LottieComposition,
     lottieParseState: LottieParseState?,
-    onUriReadyToParse: (URI) -> Unit,
+    onUriReadyToParse: (FileDesc) -> Unit,
     onLottieParsingSucceeded: (LottieComposition) -> Unit,
     onLottieParsingFailed: () -> Unit,
     modifier: Modifier = Modifier,
@@ -239,11 +233,9 @@ fun HomeScreenLottiePlayer(
                     .weight(1f)
                     .border(2.dp, MaterialTheme.colorScheme.outline)
                     .background(MaterialTheme.colorScheme.inverseOnSurface)
-                    .onExternalDrag(
-                        enabled = true,
-                        onDrag = { },
-                        onDrop = {
-                            handleDrop(it.dragData, onUriReadyToParse)
+                    .onDragAndDrop(
+                        onSingleFileDropped = {
+                            onUriReadyToParse(it)
                         },
                     ),
             )
@@ -274,19 +266,6 @@ fun HomeScreenLottiePlayer(
                 onLottieParsingSucceeded = onLottieParsingSucceeded,
                 onLottieParsingFailed = onLottieParsingFailed,
             )
-        }
-    }
-}
-
-@OptIn(ExperimentalComposeUiApi::class)
-private fun handleDrop(
-    dragData: DragData,
-    onUriReadyToParse: (URI) -> Unit
-) {
-    (dragData as? DragData.FilesList)?.run {
-        val files = readFiles()
-        if (files.size == 1) {
-            onUriReadyToParse(URI.create(files[0]))
         }
     }
 }
