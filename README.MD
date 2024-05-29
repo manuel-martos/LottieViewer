@@ -1,6 +1,6 @@
 # LottieViewer
 
-LottieViewer is an open-source application built with Compose Multiplatform, specifically targeting desktop environments. The application allows users to drag and drop Lottie files (.json) to play and preview animations. It leverages the ViewModel to handle the application state and utilizes the awesome [Compottie](https://github.com/alexzhirkevich/compottie) library for rendering Lottie animations on the desktop.
+LottieViewer is an open-source application built with Compose Multiplatform, targeting desktop and Web environments. The application allows users to drag and drop Lottie files (.json) to play and preview animations. It leverages the ViewModel to handle the application state and utilizes the awesome [Compottie](https://github.com/alexzhirkevich/compottie) library for rendering Lottie animations on the desktop.
 
 ## Features
 
