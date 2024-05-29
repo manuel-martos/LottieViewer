@@ -3,12 +3,12 @@ package com.mmartosdev.lottieviewer.ui
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mmartosdev.lottieviewer.data.FileDesc
 import com.mmartosdev.lottieviewer.data.FileStore
 import io.github.alexzhirkevich.compottie.LottieComposition
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.net.URI
 
 class HomeViewModel(
     private val fileStore: FileStore
@@ -18,10 +18,10 @@ class HomeViewModel(
     val state: StateFlow<HomeScreenUiState>
         get() = _state
 
-    fun onUriReadyToParse(uri: URI) {
+    fun onUriReadyToParse(fileDesc: FileDesc) {
         viewModelScope.launch {
             _state.value = _state.value.copy(LottieParseState.Parsing())
-            fileStore.readFileContent(uri).collect {
+            fileStore.readFileContent(fileDesc).collect {
                 _state.value = _state.value.copy(LottieParseState.Parsing(it))
             }
         }
