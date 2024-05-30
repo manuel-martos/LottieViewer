@@ -1,3 +1,5 @@
+package com.mmartosdev.lottieviewer.utils
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mmartosdev.lottieviewer.data.FileDesc

@@ -40,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mmartosdev.lottieviewer.data.FileDesc
 import com.mmartosdev.lottieviewer.data.createFileStore
 import com.mmartosdev.lottieviewer.utils.dashedBorder
+import com.mmartosdev.lottieviewer.utils.onDragAndDrop
 import io.github.alexzhirkevich.compottie.LottieAnimation
 import io.github.alexzhirkevich.compottie.LottieComposition
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
@@ -47,7 +48,6 @@ import io.github.alexzhirkevich.compottie.LottieConstants
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
 import io.github.alexzhirkevich.compottie.awaitOrNull
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
-import onDragAndDrop
 
 @Composable
 fun MainScreen(
