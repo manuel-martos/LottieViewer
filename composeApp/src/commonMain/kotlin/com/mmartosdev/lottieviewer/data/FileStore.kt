@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FileDesc
 
-interface FileStore {
+fun interface FileStore {
     suspend fun readFileContent(fileDesc: FileDesc): Flow<String>
 }
 

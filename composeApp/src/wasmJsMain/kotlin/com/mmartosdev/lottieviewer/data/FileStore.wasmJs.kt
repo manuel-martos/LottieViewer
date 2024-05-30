@@ -1,27 +1,21 @@
 package com.mmartosdev.lottieviewer.data
 
-import JsFileDesc
-import kotlinx.coroutines.flow.Flow
+import com.mmartosdev.lottieviewer.utils.JsFileDesc
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.sync.Mutex
+import org.w3c.files.FileReader
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-external class FileReader : JsAny {
-    fun readAsText(file: JsAny)
-    var onload: () -> Unit
-    val result: String
-}
-
-actual fun createFileStore(): FileStore = object : FileStore {
-    override suspend fun readFileContent(fileDesc: FileDesc): Flow<String> = flow {
+actual fun createFileStore(): FileStore = FileStore { fileDesc ->
+    flow {
         (fileDesc as? JsFileDesc)?.run {
-            val mutex = Mutex(locked = true)
-            val reader = FileReader()
-            reader.onload = {
-                mutex.unlock()
-            }
-            reader.readAsText(fileDesc.file)
-            mutex.lock()
-            emit(reader.result)
+            suspendCoroutine { continuation ->
+                val reader = FileReader()
+                reader.onload = {
+                    continuation.resume(reader.result.toString())
+                }
+                reader.readAsText(fileDesc.file)
+            }.run { emit(this) }
         } ?: throw IllegalArgumentException("Unsupported FileDesc")
     }
 }

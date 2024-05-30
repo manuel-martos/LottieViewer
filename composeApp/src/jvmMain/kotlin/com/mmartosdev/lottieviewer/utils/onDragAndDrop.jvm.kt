@@ -1,11 +1,14 @@
+package com.mmartosdev.lottieviewer.utils
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.DragData
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.onExternalDrag
 import com.mmartosdev.lottieviewer.data.FileDesc
+import java.net.URI
 
-data class UriFileDesc(val uri: String) : FileDesc
+data class UriFileDesc(val uri: URI) : FileDesc
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -26,7 +29,7 @@ private fun extractSingleFile(dragData: DragData): FileDesc? =
     (dragData as? DragData.FilesList)?.run {
         val files = readFiles()
         if (files.size == 1) {
-            return UriFileDesc(files[0])
+            return UriFileDesc(URI.create(files[0]))
         }
         null
     }

@@ -1,11 +1,15 @@
-var dragAndDropListener = null
+var dragAndDropListener = null;
 
 function registerDragAndDropListener(onDragOver, onDragLeave, onDrop) {
-    dragAndDropListener = { onDragOver: onDragOver, onDragLeave: onDragLeave, onDrop: onDrop };
+    dragAndDropListener = {
+        onDragOver: onDragOver,
+        onDragLeave: onDragLeave,
+        onDrop: onDrop,
+    };
 }
 
 function unregisterDragAndDropListener() {
-    dragAndDropListener = null
+    dragAndDropListener = null;
 }
 
 function dropHandler(ev) {
@@ -18,12 +22,12 @@ function dropHandler(ev) {
 
 function dragOverHandler(ev) {
     ev.preventDefault();
-    dragAndDropListener?.onDragOver()
+    dragAndDropListener?.onDragOver();
 }
 
 function dragLeaveHandler(ev) {
     ev.preventDefault();
-    dragAndDropListener?.onDragLeave()
+    dragAndDropListener?.onDragLeave();
 }
 
 function extractSingleFile(ev) {
@@ -35,5 +39,5 @@ function extractSingleFile(ev) {
     } else if (ev.dataTransfer.files.length == 1) {
         return ev.dataTransfer.files[0];
     }
-    return undefined
+    return undefined;
 }
