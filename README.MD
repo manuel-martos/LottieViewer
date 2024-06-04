@@ -24,13 +24,19 @@ https://github.com/manuel-martos/LottieViewer/assets/4267427/a91c40a8-6123-450b-
 4. Navigate to the cloned repository directory and select the `build.gradle.kts` file or the project root directory, then click **OK** to open the project.
 5. Let Android Studio sync the project. This may take a few minutes as it downloads necessary dependencies.
 
-### Running the Application
+### Running Desktop Application
 
 1. In the **Gradle** tool window (usually on the right side of Android Studio), expand the `composeApp` project.
 2. Within the `composeApp` project, expand **Tasks > compose desktop**.
 3. Double-click the `run` task to launch the application.
 
 Once the application is running, you can drag and drop any Lottie file (.json) into the application window, and the animation will automatically start playing.
+
+### Running Web Application
+
+1. In the **Gradle** tool window (usually on the right side of Android Studio), expand the `composeApp` project.
+2. Within the `composeApp` project, expand **Tasks > kotlin browser**.
+3. Double-click the `wasmJsBrowserProductionRun` task to launch the application.
 
 ## License
 
