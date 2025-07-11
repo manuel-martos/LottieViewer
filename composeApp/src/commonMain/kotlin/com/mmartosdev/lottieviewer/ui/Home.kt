@@ -3,6 +3,8 @@ package com.mmartosdev.lottieviewer.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -237,6 +239,11 @@ fun HomeScreenLottiePlayer(
                         onSingleFileDropped = {
                             onUriReadyToParse(it)
                         },
+                    )
+                    .clickable(
+                        onClick = { isPlaying = !isPlaying },
+                        interactionSource = MutableInteractionSource(),
+                        indication = null
                     ),
             )
             Spacer(modifier = Modifier.height(16.dp))
