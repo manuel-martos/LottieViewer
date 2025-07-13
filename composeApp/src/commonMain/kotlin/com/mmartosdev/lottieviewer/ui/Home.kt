@@ -43,13 +43,7 @@ import com.mmartosdev.lottieviewer.data.FileDesc
 import com.mmartosdev.lottieviewer.data.createFileStore
 import com.mmartosdev.lottieviewer.utils.dashedBorder
 import com.mmartosdev.lottieviewer.utils.onDragAndDrop
-import io.github.alexzhirkevich.compottie.LottieAnimation
-import io.github.alexzhirkevich.compottie.LottieComposition
-import io.github.alexzhirkevich.compottie.LottieCompositionSpec
-import io.github.alexzhirkevich.compottie.LottieConstants
-import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
-import io.github.alexzhirkevich.compottie.awaitOrNull
-import io.github.alexzhirkevich.compottie.rememberLottieComposition
+import io.github.alexzhirkevich.compottie.*
 
 @Composable
 fun MainScreen(
@@ -215,31 +209,44 @@ fun HomeScreenLottiePlayer(
     modifier: Modifier = Modifier,
 ) {
     var isPlaying by remember { mutableStateOf(true) }
+    var sliderProgress by remember { mutableStateOf(0f) }
     Box(modifier = modifier) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
                 .padding(16.dp),
         ) {
-            val progress = animateLottieCompositionAsState(
-                isPlaying = isPlaying,
-                composition = composition,
-                restartOnPlay = false,
-                iterations = LottieConstants.IterateForever,
-            )
+            val animatable = rememberLottieAnimatable()
+            LaunchedEffect(isPlaying) {
+                if (isPlaying) {
+                    animatable.animate(
+                        composition = composition,
+                        iterations = LottieConstants.IterateForever,
+                    )
+                } else {
+                    animatable.snapTo(
+                        composition = composition,
+                        progress = animatable.progress,
+                    )
+                }
+            }
+            LaunchedEffect(sliderProgress) {
+                if (!isPlaying) {
+                    animatable.snapTo(
+                        composition = composition,
+                        progress = sliderProgress,
+                    )
+                }
+            }
             LottieAnimation(
                 composition = composition,
-                progress = { progress.progress },
+                progress = { animatable.progress },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
                     .border(2.dp, MaterialTheme.colorScheme.outline)
                     .background(MaterialTheme.colorScheme.inverseOnSurface)
-                    .onDragAndDrop(
-                        onSingleFileDropped = {
-                            onUriReadyToParse(it)
-                        },
-                    )
+                    .onDragAndDrop(onSingleFileDropped = { onUriReadyToParse(it) })
                     .clickable(
                         onClick = { isPlaying = !isPlaying },
                         interactionSource = MutableInteractionSource(),
@@ -260,8 +267,8 @@ fun HomeScreenLottiePlayer(
                     )
                 }
                 Slider(
-                    value = progress.progress,
-                    onValueChange = { /* no-op */ },
+                    value = animatable.progress,
+                    onValueChange = { if (!isPlaying) sliderProgress = it },
                     modifier = Modifier.fillMaxWidth(0.7f),
                 )
             }
