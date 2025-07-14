@@ -216,8 +216,8 @@ fun HomeScreenLottiePlayer(
             modifier = modifier
                 .padding(16.dp),
         ) {
-            val animatable = rememberLottieAnimatable()
-            LaunchedEffect(isPlaying) {
+            val animatable = remember(composition) { LottieAnimatable() }
+            LaunchedEffect(animatable, isPlaying) {
                 if (isPlaying) {
                     animatable.animate(
                         composition = composition,
