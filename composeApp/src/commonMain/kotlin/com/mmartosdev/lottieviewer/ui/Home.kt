@@ -43,7 +43,13 @@ import com.mmartosdev.lottieviewer.data.FileDesc
 import com.mmartosdev.lottieviewer.data.createFileStore
 import com.mmartosdev.lottieviewer.utils.dashedBorder
 import com.mmartosdev.lottieviewer.utils.onDragAndDrop
-import io.github.alexzhirkevich.compottie.*
+import io.github.alexzhirkevich.compottie.LottieAnimatable
+import io.github.alexzhirkevich.compottie.LottieAnimation
+import io.github.alexzhirkevich.compottie.LottieComposition
+import io.github.alexzhirkevich.compottie.LottieCompositionSpec
+import io.github.alexzhirkevich.compottie.LottieConstants
+import io.github.alexzhirkevich.compottie.awaitOrNull
+import io.github.alexzhirkevich.compottie.rememberLottieComposition
 
 @Composable
 fun MainScreen(
@@ -208,7 +214,7 @@ fun HomeScreenLottiePlayer(
     onLottieParsingFailed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isPlaying by remember { mutableStateOf(true) }
+    var isPlaying by remember(composition) { mutableStateOf(true) }
     var sliderProgress by remember { mutableStateOf(0f) }
     Box(modifier = modifier) {
         Column(
@@ -222,6 +228,7 @@ fun HomeScreenLottiePlayer(
                     animatable.animate(
                         composition = composition,
                         iterations = LottieConstants.IterateForever,
+                        initialProgress = animatable.progress
                     )
                 } else {
                     animatable.snapTo(
